@@ -1,12 +1,39 @@
+//Killer
+let killerRoom = "garage"
+
+function killerRound(){
+    let killerActionPossibility = Math.floor(Math.random() * 2);
+    let killerNewRoom = Math.floor(Math.random() * 2);
+
+    const room = rooms.find(r => r.id === killerRoom);
+
+
+        if(killerActionPossibility === 0){
+            alert("The killer didn't make an action!")
+            return;
+        }else{
+            const randomIndex = Math.floor(Math.random() * room.connections.length);
+            killerRoom = room.connections[randomIndex];
+            alert("The killer is moving!")
+        }
+}
+
 //Action count per round
-actions = 1
+actions = 5
 function makeAction() {
     actions -= 1
 }
 
+function checkAction() {
+    if(actions <= 0){
+        alert("You don't have more actions!")
+        return false
+    }
+    return true
+}
 
 
-    
+
 //Menus
 menu = document.getElementById("menu")
 startMenu = document.getElementById("start")
@@ -35,6 +62,12 @@ let currentRoom = "bedroom";
 
 //Show room and its properties
 function showRoom() {
+    if(!checkAction()) return;
+
+    makeAction()
+    
+    killerRound()
+    checkCurrentRoom()
 
     //Hide all rooms
     rooms.forEach(room => {
@@ -45,8 +78,17 @@ function showRoom() {
     roomElements[currentRoom].style.display = "block";
 
     updateWalkMenu();
+
 }
 
+
+
+function checkCurrentRoom(){
+    if(currentRoom === killerRoom){
+        alert("You're in the same room of killer!")
+
+    }
+}
 
 
 function updateWalkMenu() {
